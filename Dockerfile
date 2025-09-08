@@ -1,14 +1,14 @@
-# Sử dụng Tomcat 9 chính thức từ Docker Hub
-FROM tomcat:9.0-jdk11
+# Sử dụng Tomcat 9 với JDK 17
+FROM tomcat:9.0-jdk17
 
-# Xóa file webapp mặc định Tomcat
+# Xóa các webapp mặc định (docs, examples,...)
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy file WAR của bạn vào thư mục webapps và rename thành ROOT.war để truy cập trực tiếp tại /
-COPY dist/ch08_ex1_email.war /usr/local/tomcat/webapps/ROOT.war
+# Copy file WAR đã build vào Tomcat và đổi thành ROOT.war
+COPY dist/ch06_ex2_survey.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose cổng 8080 (mặc định Tomcat)
+# Expose cổng 8080 (Render sẽ tự map cổng này)
 EXPOSE 8080
 
-# Chạy Tomcat (đây là CMD mặc định của image tomcat:9.0-jdk11, nhưng để rõ ràng thì ghi lại)
+# Chạy Tomcat
 CMD ["catalina.sh", "run"]
