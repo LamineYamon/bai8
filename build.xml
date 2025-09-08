@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ch08_ex1_email" default="deploy" basedir=".">
+    <!-- ==== Properties ==== -->
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="web"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="war.name" value="ch08_ex1_email.war"/>
+
+    <!-- Đường dẫn tuyệt đối tới servlet-api.jar của Tomcat -->
+    <property name="servlet-api.jar" value="D:/Code/Năm 3/ltw/apache-tomcat-9.0.108/lib/servlet-api.jar"/>
+
+    <!-- Đường dẫn đến thư mục webapps của Tomcat -->
+    <property name="tomcat.webapps" value="D:/Code/Năm 3/ltw/apache-tomcat-9.0.108/webapps"/>
+
+    <!-- ==== Tasks ==== -->
+
+    <!-- 1. Compile Java source files -->
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+            <classpath>
+                <pathelement path="${servlet-api.jar}"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- 2. Build WAR file -->
+    <target name="war" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <war destfile="${dist.dir}/${war.name}" webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}"/>
+            <classes dir="${classes.dir}"/>
+        </war>
+    </target>
+
+    <!-- 3. Deploy WAR to Tomcat webapps -->
+    <target name="deploy" depends="war">
+        <copy file="${dist.dir}/${war.name}" todir="${tomcat.webapps}" overwrite="true"/>
+        <echo message="✅ WAR file deployed to Tomcat successfully!"/>
+    </target>
+</project>
